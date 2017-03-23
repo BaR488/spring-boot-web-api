@@ -11,10 +11,10 @@ import java.util.List;
  * Created by boris on 23.03.2017.
  */
 @Entity
-@Table(name = "customer")
+@Table(name = "product")
 @Getter
 @Setter
-public class Customer implements DomainObject {
+public class Product  implements DomainObject{
     @Id
     @GeneratedValue
     private Long id;
@@ -22,6 +22,6 @@ public class Customer implements DomainObject {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "customer")
-    private List<Order> orders = new ArrayList<Order>();
+    @ManyToMany(mappedBy = "products")
+    private List<Order> orders =  new ArrayList<Order>();
 }

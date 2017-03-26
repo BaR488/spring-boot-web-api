@@ -2,6 +2,11 @@ package com.example.controller;
 
 import com.example.entity.Order;
 import com.example.repository.OrderRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,12 +28,16 @@ public class OrderController {
     }
 
     @GetMapping("/orders")
-    public List getorders() {
-        return orderRepository.findAll();
+    public List<Order> getOrders(@Param("page") Integer page, @Param("limit") Integer limit, @Param("sort") String sortBy,
+                                 @Param("dir") Sort.Direction direction) {
+
+        PageRequest pageRequest = new PageRequest(page,limit,
+                new Sort(direction, sortBy));
+        return orderRepository.findAll(pageRequest).getContent();
     }
 
     @GetMapping("/orders/{id}")
-    public ResponseEntity getorder(@PathVariable("id") Long id) {
+    public ResponseEntity getOrder(@PathVariable("id") Long id) {
 
         Order order = orderRepository.findOne(id);
         if (order == null) {
@@ -39,15 +48,15 @@ public class OrderController {
     }
 
     @PostMapping(value = "/orders")
-    public ResponseEntity createorder(@RequestBody Order order) {
-        order.setCreated_at(ZonedDateTime.now());
+    public ResponseEntity createOrder(@RequestBody Order order) {
+        order.setCreated(ZonedDateTime.now());
         order = orderRepository.save(order);
 
         return new ResponseEntity(order, HttpStatus.OK);
     }
 
     @DeleteMapping("/orders/{id}")
-    public ResponseEntity deleteorder(@PathVariable Long id) {
+    public ResponseEntity deleteOrder(@PathVariable Long id) {
         if (!orderRepository.exists(id)) {
             return new ResponseEntity("No order found for ID " + id, HttpStatus.NOT_FOUND);
         }
@@ -57,7 +66,7 @@ public class OrderController {
     }
 
     @PutMapping("/orders/{id}")
-    public ResponseEntity updateorder(@PathVariable Long id, @RequestBody Order order) {
+    public ResponseEntity updateOrder(@PathVariable Long id, @RequestBody Order order) {
         if (orderRepository.exists(id)) {
             return new ResponseEntity("No order found for ID " + id, HttpStatus.NOT_FOUND);
         }

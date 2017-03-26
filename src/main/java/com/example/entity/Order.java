@@ -31,9 +31,9 @@ public class Order implements DomainObject {
     private Customer customer;
 
     @NotNull
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created", nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm")
-    private ZonedDateTime created_at;
+    private ZonedDateTime created;
 
 
     @ManyToMany()
@@ -41,7 +41,7 @@ public class Order implements DomainObject {
             joinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"))
     private List<Product> products = new ArrayList<Product>();
 
-    public void setCreated_at(ZonedDateTime created_at) {
-        this.created_at = created_at;
+    public void setCreated(ZonedDateTime created) {
+        this.created = created;
     }
 }

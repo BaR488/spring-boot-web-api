@@ -32,7 +32,7 @@ public class Order implements DomainObject {
 
     @NotNull
     @Column(name = "created", nullable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm")
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm")
     private ZonedDateTime created;
 
 
